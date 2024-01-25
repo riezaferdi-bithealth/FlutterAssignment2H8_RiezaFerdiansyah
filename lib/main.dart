@@ -10,34 +10,9 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            "Today's News",
-            style: TextStyle(fontSize: 30),
-          ),
-          bottom: PreferredSize(
-            preferredSize: const Size(0, 10),
-            child: Text(
-                '${DateFormat.EEEE().format(DateTime.now())}, ${DateFormat.d().format(DateTime.now())} ${DateFormat.MMMM().format(DateTime.now())} ${DateFormat.y().format(DateTime.now())}'),
-          ),
-          // flexibleSpace: PreferredSize(
-          //   preferredSize: const Size.fromHeight(100),
-          //   child: Text(
-          //     DateFormat.yMMMEd().format(DateTime.now()),
-          //   ),
-          // ),
-          actions: <Widget>[
-            IconButton(
-              icon: const Icon(Icons.account_circle_outlined),
-              tooltip: 'Profile',
-              onPressed: () {},
-            ),
-          ],
-          backgroundColor: Colors.white,
-        ),
-        body: const NewsList(),
+        body: NewsList(),
       ),
     );
   }
@@ -82,6 +57,27 @@ class ProfileIcon extends StatelessWidget {
   }
 }
 
+class TopBar extends StatelessWidget {
+  const TopBar({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Today\'s News',
+          style: TextStyle(fontSize: 30),
+        ),
+        Text(
+          '${DateFormat.EEEE().format(DateTime.now())}, ${DateFormat.d().format(DateTime.now())} ${DateFormat.MMMM().format(DateTime.now())} ${DateFormat.y().format(DateTime.now())}',
+          style: const TextStyle(fontSize: 10, color: Colors.grey),
+        ),
+      ],
+    );
+  }
+}
+
 class NewsList extends StatelessWidget {
   const NewsList({super.key});
 
@@ -90,6 +86,7 @@ class NewsList extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: <Widget>[
+        const TopBar(),
         const Text(
           'Latest News',
           style: TextStyle(
@@ -105,11 +102,18 @@ class NewsList extends StatelessWidget {
           ),
         ),
         const Text(
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam ac mauris eu leo pellentesque rutrum non et odio. Quisque at mattis velit.',
+          'Batik Mendunia oleh Badan Nasional Pengelola Batik',
           style: TextStyle(
             overflow: TextOverflow.clip,
             fontSize: 16,
-            color: Colors.black,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Text(
+          '${DateFormat.EEEE().format(DateTime.now())}, ${DateFormat.d().format(DateTime.now())} ${DateFormat.MMMM().format(DateTime.now())} ${DateFormat.y().format(DateTime.now())} | 4 hours ago',
+          style: const TextStyle(
+            fontSize: 12,
+            color: Colors.grey,
           ),
         ),
         Row(
@@ -161,6 +165,7 @@ class NewsList extends StatelessWidget {
             '${DateFormat.EEEE().format(DateTime.now())}, ${DateFormat.d().format(DateTime.now())} ${DateFormat.MMMM().format(DateTime.now())} ${DateFormat.y().format(DateTime.now())} | 4 hours ago',
             style: const TextStyle(
               fontSize: 12,
+              color: Colors.grey,
             ),
           ),
           // trailing: const Icon(Icons.favorite),
@@ -187,6 +192,7 @@ class NewsList extends StatelessWidget {
             '${DateFormat.EEEE().format(DateTime.now())}, ${DateFormat.d().format(DateTime.now())} ${DateFormat.MMMM().format(DateTime.now())} ${DateFormat.y().format(DateTime.now())} | 4 hours ago',
             style: const TextStyle(
               fontSize: 12,
+              color: Colors.grey,
             ),
           ),
           // trailing: const Icon(Icons.favorite),
@@ -213,6 +219,7 @@ class NewsList extends StatelessWidget {
             '${DateFormat.EEEE().format(DateTime.now())}, ${DateFormat.d().format(DateTime.now())} ${DateFormat.MMMM().format(DateTime.now())} ${DateFormat.y().format(DateTime.now())} | 4 hours ago',
             style: const TextStyle(
               fontSize: 12,
+              color: Colors.grey,
             ),
           ),
           // trailing: const Icon(Icons.favorite),
