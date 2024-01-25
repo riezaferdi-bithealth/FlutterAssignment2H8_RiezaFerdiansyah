@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutterassignment2h8_riezaferdiansyah/detail_page.dart';
+import './api/news_service.dart';
 
 void main() {
   runApp(const MainApp());
@@ -12,8 +14,36 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       home: Scaffold(
-        body: NewsList(),
+        body: NewsBody(),
+        bottomNavigationBar: BottomBar(),
       ),
+      debugShowCheckedModeBanner: false,
+    );
+  }
+}
+
+class NewsBody extends StatelessWidget {
+  const NewsBody({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      padding: const EdgeInsets.all(16),
+      children: const <Widget>[
+        TopBar(),
+        Text(
+          'Latest News',
+          style: TextStyle(
+            height: 3,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        LatestNews(),
+        HotNews(),
+        ListNews(),
+        //NewsAPIList(),
+      ],
     );
   }
 }
@@ -29,17 +59,17 @@ class ProfileIcon extends StatelessWidget {
         clipBehavior: Clip.hardEdge,
         children: [
           Container(
-            width: 120,
-            height: 120,
+            width: 50,
+            height: 50,
             decoration: const BoxDecoration(
               shape: BoxShape.circle,
               color: Colors.black,
             ),
           ),
           Container(
-            width: 35,
-            height: 35,
-            padding: const EdgeInsets.all(5),
+            width: 25,
+            height: 25,
+            padding: const EdgeInsets.all(4),
             decoration: const BoxDecoration(
               shape: BoxShape.circle,
               color: Colors.white,
@@ -63,168 +93,236 @@ class TopBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      //crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Today\'s News',
-          style: TextStyle(fontSize: 30),
-        ),
-        Text(
-          '${DateFormat.EEEE().format(DateTime.now())}, ${DateFormat.d().format(DateTime.now())} ${DateFormat.MMMM().format(DateTime.now())} ${DateFormat.y().format(DateTime.now())}',
-          style: const TextStyle(fontSize: 10, color: Colors.grey),
+        const SizedBox(height: 30),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.values[3],
+          children: [
+            Container(
+                child: Column(
+              children: [
+                const Text(
+                  'Today\'s News',
+                  style: TextStyle(fontSize: 30),
+                ),
+                Text(
+                  '${DateFormat.EEEE().format(DateTime.now())}, ${DateFormat.d().format(DateTime.now())} ${DateFormat.MMMM().format(DateTime.now())} ${DateFormat.y().format(DateTime.now())}',
+                  style: const TextStyle(fontSize: 15, color: Colors.grey),
+                ),
+              ],
+            )),
+            Container(
+              child: ProfileIcon(),
+            ),
+          ],
         ),
       ],
     );
   }
 }
 
-class NewsList extends StatelessWidget {
-  const NewsList({super.key});
+class ListNews extends StatelessWidget {
+  const ListNews({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.all(16),
-      children: <Widget>[
-        const TopBar(),
-        const Text(
-          'Latest News',
-          style: TextStyle(
-            height: 3,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const DetailPage(),
+          ),
+        );
+      },
+      child: ListTile(
+        leading: ClipRRect(
+          borderRadius: BorderRadius.circular(10.0),
+          child: const AspectRatio(
+            aspectRatio: 8 / 7,
+            child: Image(
+              image: AssetImage('assets/images/batik2.jpg'),
+              fit: BoxFit.cover,
+            ),
           ),
         ),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(8.0),
-          child: const Image(
-            image: AssetImage('assets/images/batik1.jpg'),
-          ),
-        ),
-        const Text(
+        title: const Text(
           'Batik Mendunia oleh Badan Nasional Pengelola Batik',
           style: TextStyle(
-            overflow: TextOverflow.clip,
-            fontSize: 16,
+            fontSize: 15,
             fontWeight: FontWeight.bold,
           ),
         ),
-        Text(
+        subtitle: Text(
           '${DateFormat.EEEE().format(DateTime.now())}, ${DateFormat.d().format(DateTime.now())} ${DateFormat.MMMM().format(DateTime.now())} ${DateFormat.y().format(DateTime.now())} | 4 hours ago',
           style: const TextStyle(
             fontSize: 12,
             color: Colors.grey,
           ),
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.values[3],
-          children: <Widget>[
-            Container(
-              color: Colors.white,
-              child: const Text(
-                'Hot News',
-                style: TextStyle(
-                  height: 3,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            Container(
-              color: Colors.white,
-              child: const Text(
-                'View All',
-                style: TextStyle(
-                  color: Colors.grey,
-                  height: 3,
-                  fontSize: 12,
-                ),
-              ),
-            ),
-          ],
-        ),
-        ListTile(
-          leading: ClipRRect(
-            borderRadius: BorderRadius.circular(10.0),
-            child: const AspectRatio(
-              aspectRatio: 8 / 7,
-              child: Image(
-                image: AssetImage('assets/images/batik1.jpg'),
-                fit: BoxFit.cover, // use this
-              ),
+      ),
+    );
+  }
+}
+
+class LatestNews extends StatelessWidget {
+  const LatestNews({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const DetailPage(),
+          ),
+        );
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8.0),
+            child: const Image(
+              image: AssetImage('assets/images/batik1.jpg'),
             ),
           ),
-          title: const Text(
+          const Text(
             'Batik Mendunia oleh Badan Nasional Pengelola Batik',
             style: TextStyle(
-              fontSize: 15,
+              overflow: TextOverflow.clip,
+              fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
           ),
-          subtitle: Text(
+          Text(
             '${DateFormat.EEEE().format(DateTime.now())}, ${DateFormat.d().format(DateTime.now())} ${DateFormat.MMMM().format(DateTime.now())} ${DateFormat.y().format(DateTime.now())} | 4 hours ago',
             style: const TextStyle(
               fontSize: 12,
               color: Colors.grey,
             ),
           ),
-          // trailing: const Icon(Icons.favorite),
-        ),
-        ListTile(
-          leading: ClipRRect(
-            borderRadius: BorderRadius.circular(10.0),
-            child: const AspectRatio(
-              aspectRatio: 8 / 7,
-              child: Image(
-                image: AssetImage('assets/images/batik2.jpg'),
-                fit: BoxFit.cover, // use this
-              ),
-            ),
-          ),
-          title: const Text(
-            'Batik Mendunia oleh Badan Nasional Pengelola Batik',
+        ],
+      ),
+    );
+  }
+}
+
+class HotNews extends StatelessWidget {
+  const HotNews({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.values[3],
+      children: <Widget>[
+        Container(
+          color: Colors.white,
+          child: const Text(
+            'Hot News',
             style: TextStyle(
-              fontSize: 15,
+              height: 3,
+              fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
           ),
-          subtitle: Text(
-            '${DateFormat.EEEE().format(DateTime.now())}, ${DateFormat.d().format(DateTime.now())} ${DateFormat.MMMM().format(DateTime.now())} ${DateFormat.y().format(DateTime.now())} | 4 hours ago',
-            style: const TextStyle(
-              fontSize: 12,
-              color: Colors.grey,
-            ),
-          ),
-          // trailing: const Icon(Icons.favorite),
         ),
-        ListTile(
-          leading: ClipRRect(
-            borderRadius: BorderRadius.circular(10.0),
-            child: const AspectRatio(
-              aspectRatio: 8 / 7,
-              child: Image(
-                image: AssetImage('assets/images/batik3.jpg'),
-                fit: BoxFit.cover, // use this
-              ),
-            ),
-          ),
-          title: const Text(
-            'Batik Mendunia oleh Badan Nasional Pengelola Batik',
+        Container(
+          color: Colors.white,
+          child: const Text(
+            'View All',
             style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          subtitle: Text(
-            '${DateFormat.EEEE().format(DateTime.now())}, ${DateFormat.d().format(DateTime.now())} ${DateFormat.MMMM().format(DateTime.now())} ${DateFormat.y().format(DateTime.now())} | 4 hours ago',
-            style: const TextStyle(
-              fontSize: 12,
               color: Colors.grey,
+              height: 3,
+              fontSize: 12,
             ),
           ),
-          // trailing: const Icon(Icons.favorite),
         ),
       ],
+    );
+  }
+}
+
+class BottomBar extends StatefulWidget {
+  const BottomBar({super.key});
+
+  @override
+  State<BottomBar> createState() => _BottomBarState();
+}
+
+class _BottomBarState extends State<BottomBar> {
+  int index = 0;
+  @override
+  Widget build(BuildContext context) {
+    return BottomNavigationBar(
+      currentIndex: index,
+      onTap: (value) {
+        print(value);
+        setState(() {
+          index = value;
+        });
+      },
+      items: const [
+        BottomNavigationBarItem(
+          label: 'Home',
+          icon: Icon(Icons.home),
+        ),
+        BottomNavigationBarItem(
+          label: 'Profile',
+          icon: Icon(Icons.account_circle),
+        ),
+        BottomNavigationBarItem(
+          label: 'Settings',
+          icon: Icon(Icons.settings),
+        ),
+      ],
+    );
+  }
+}
+
+class NewsAPIList extends StatefulWidget {
+  const NewsAPIList({super.key});
+
+  @override
+  State<NewsAPIList> createState() => _NewsAPIListState();
+}
+
+class _NewsAPIListState extends State<NewsAPIList> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: FutureBuilder(
+          future: getNewsData(),
+          builder: (context, snapshot) {
+            print(snapshot);
+            if (snapshot.connectionState == ConnectionState.done) {
+              //var items = snapshot.data as List<ListNews>;
+              return ListView.builder(
+                itemCount: snapshot.data?.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    leading: Image.asset(
+                        snapshot.data?[index].urlToImage! ?? '_'),
+                    title: Text(snapshot.data?[index].title! ?? '_'),
+                    subtitle: Text(
+                        "By ${snapshot.data?[index].author! ?? '_'} on ${snapshot.data?[index].publishedAt! ?? '_'}"),
+                    trailing: Text(snapshot.data?[index].content! ?? '_'),
+                  );
+                },
+              );
+            } else if (snapshot.hasError) {
+              return Text("${snapshot.error}");
+            }
+        
+            // By default, show a loading spinner.
+            // return const CircularProgressIndicator();
+            return const Text("Berhasil Masuk");
+          },
+        ),
+      ),
     );
   }
 }
