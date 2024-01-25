@@ -47,14 +47,6 @@ class DetailNews extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        // const Text(
-        //   'Latest News',
-        //   style: TextStyle(
-        //     height: 3,
-        //     fontSize: 20,
-        //     fontWeight: FontWeight.bold,
-        //   ),
-        // ),
         ClipRRect(
           borderRadius: BorderRadius.circular(0),
           child: const Image(

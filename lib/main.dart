@@ -41,8 +41,8 @@ class NewsBody extends StatelessWidget {
         ),
         LatestNews(),
         HotNews(),
-        ListNews(),
-        //NewsAPIList(),
+        //ListNews(),
+        NewsAPIList(),
       ],
     );
   }
@@ -122,49 +122,50 @@ class TopBar extends StatelessWidget {
   }
 }
 
-class ListNews extends StatelessWidget {
-  const ListNews({super.key});
+// class ListNews extends StatelessWidget {
+//   const ListNews({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const DetailPage(),
-          ),
-        );
-      },
-      child: ListTile(
-        leading: ClipRRect(
-          borderRadius: BorderRadius.circular(10.0),
-          child: const AspectRatio(
-            aspectRatio: 8 / 7,
-            child: Image(
-              image: AssetImage('assets/images/batik2.jpg'),
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
-        title: const Text(
-          'Batik Mendunia oleh Badan Nasional Pengelola Batik',
-          style: TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        subtitle: Text(
-          '${DateFormat.EEEE().format(DateTime.now())}, ${DateFormat.d().format(DateTime.now())} ${DateFormat.MMMM().format(DateTime.now())} ${DateFormat.y().format(DateTime.now())} | 4 hours ago',
-          style: const TextStyle(
-            fontSize: 12,
-            color: Colors.grey,
-          ),
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return GestureDetector(
+//       onTap: () {
+//         Navigator.push(
+//           context,
+//           MaterialPageRoute(
+//             builder: (context) => const DetailPage(),
+//           ),
+//         );
+//       },
+//       child: ListTile(
+//         leading: ClipRRect(
+//           borderRadius: BorderRadius.circular(10.0),
+//           child: const AspectRatio(
+//             aspectRatio: 8 / 7,
+//             child: Image(
+//               image: AssetImage('assets/images/batik2.jpg'),
+//               fit: BoxFit.cover,
+//             ),
+//           ),
+//         ),
+//         title: const Text(
+//           'Batik Mendunia oleh Badan Nasional Pengelola Batik',
+//           style: TextStyle(
+//             fontSize: 15,
+//             fontWeight: FontWeight.bold,
+//           ),
+//         ),
+//         subtitle: Text(
+//           '${DateFormat.EEEE().format(DateTime.now())}, ${DateFormat.d().format(DateTime.now())} ${DateFormat.MMMM().format(DateTime.now())} ${DateFormat.y().format(DateTime.now())} | 4 hours ago',
+//           style: const TextStyle(
+//             fontSize: 12,
+//             color: Colors.grey,
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
 
 class LatestNews extends StatelessWidget {
   const LatestNews({super.key});
@@ -245,6 +246,59 @@ class HotNews extends StatelessWidget {
   }
 }
 
+class NewsAPIList extends StatefulWidget {
+  const NewsAPIList({super.key});
+
+  @override
+  State<NewsAPIList> createState() => _NewsAPIListState();
+}
+
+class _NewsAPIListState extends State<NewsAPIList> {
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: getNewsData(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          print(snapshot.data);
+          return ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: snapshot.data?.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                leading:
+                    Image.network(snapshot.data?[index].urlToImage! ?? '_'),
+                title: Text(snapshot.data?[index].title! ?? '_'),
+                subtitle: Text(
+                    "By ${snapshot.data?[index].author! ?? '_'} on ${snapshot.data?[index].publishedAt! ?? '_'}"),
+                // trailing: SizedBox(
+                //   width: 100,
+                //   child: Row(
+                //     mainAxisSize: MainAxisSize.min,
+                //     children: [
+                //       Text(
+                //         snapshot.data?[index].content! ?? '_',
+                //         style: const TextStyle(
+                //           fontSize: 12,
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+              );
+            },
+          );
+        } else if (snapshot.hasError) {
+          return const Text("ERROR COI");
+        }
+        // By default, show a loading spinner.
+        return const CircularProgressIndicator();
+      },
+    );
+  }
+}
+
 class BottomBar extends StatefulWidget {
   const BottomBar({super.key});
 
@@ -282,44 +336,34 @@ class _BottomBarState extends State<BottomBar> {
   }
 }
 
-class NewsAPIList extends StatefulWidget {
-  const NewsAPIList({super.key});
+class NewsAPIList2 extends StatelessWidget {
+  const NewsAPIList2({super.key});
 
-  @override
-  State<NewsAPIList> createState() => _NewsAPIListState();
-}
-
-class _NewsAPIListState extends State<NewsAPIList> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: FutureBuilder(
-          future: getNewsData(),
-          builder: (context, snapshot) {
-            print(snapshot);
-            if (snapshot.connectionState == ConnectionState.done) {
-              return ListView.builder(
-                itemCount: snapshot.data?.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    leading:
-                        Image.asset(snapshot.data?[index].urlToImage! ?? '_'),
-                    title: Text(snapshot.data?[index].title! ?? '_'),
-                    subtitle: Text(
-                        "By ${snapshot.data?[index].author! ?? '_'} on ${snapshot.data?[index].publishedAt! ?? '_'}"),
-                    trailing: Text(snapshot.data?[index].content! ?? '_'),
-                  );
-                },
+    return FutureBuilder(
+      future: getNewsData(),
+      builder: (context, snapshot) {
+        print(snapshot);
+        if (snapshot.connectionState == ConnectionState.done) {
+          return ListView.builder(
+            itemCount: snapshot.data?.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                leading: Image.asset(snapshot.data?[index].urlToImage! ?? '_'),
+                title: Text(snapshot.data?[index].title! ?? '_'),
+                subtitle: Text(
+                    "By ${snapshot.data?[index].author! ?? '_'} on ${snapshot.data?[index].publishedAt! ?? '_'}"),
+                trailing: Text(snapshot.data?[index].content! ?? '_'),
               );
-            } else if (snapshot.hasError) {
-              return Text("${snapshot.error}");
-            }
-            // By default, show a loading spinner.
-            return const CircularProgressIndicator();
-          },
-        ),
-      ),
+            },
+          );
+        } else if (snapshot.hasError) {
+          return Text("${snapshot.error}");
+        }
+        // By default, show a loading spinner.
+        return const CircularProgressIndicator();
+      },
     );
   }
 }
