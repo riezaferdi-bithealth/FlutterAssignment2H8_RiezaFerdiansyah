@@ -299,13 +299,12 @@ class _NewsAPIListState extends State<NewsAPIList> {
           builder: (context, snapshot) {
             print(snapshot);
             if (snapshot.connectionState == ConnectionState.done) {
-              //var items = snapshot.data as List<ListNews>;
               return ListView.builder(
                 itemCount: snapshot.data?.length,
                 itemBuilder: (context, index) {
                   return ListTile(
-                    leading: Image.asset(
-                        snapshot.data?[index].urlToImage! ?? '_'),
+                    leading:
+                        Image.asset(snapshot.data?[index].urlToImage! ?? '_'),
                     title: Text(snapshot.data?[index].title! ?? '_'),
                     subtitle: Text(
                         "By ${snapshot.data?[index].author! ?? '_'} on ${snapshot.data?[index].publishedAt! ?? '_'}"),
@@ -316,10 +315,8 @@ class _NewsAPIListState extends State<NewsAPIList> {
             } else if (snapshot.hasError) {
               return Text("${snapshot.error}");
             }
-        
             // By default, show a loading spinner.
-            // return const CircularProgressIndicator();
-            return const Text("Berhasil Masuk");
+            return const CircularProgressIndicator();
           },
         ),
       ),
