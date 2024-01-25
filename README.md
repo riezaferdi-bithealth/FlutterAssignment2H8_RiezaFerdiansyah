@@ -4,4 +4,4 @@ A new Flutter project.
 
 Contoh SS Image:
 
-![Hasil UI](assets\images\SScontoh.png)
+![Hasil UI](assets/images/SScontoh.png)
