@@ -3,4 +3,4 @@
 A new Flutter project.\
 
 Contoh SS Image:\
-![GitHub Image](\images\SScontoh.png)
+![GitHub Image](assets\images\SScontoh.png)
