@@ -1,1 +1,3 @@
-# FlutterAssignment2H8_RiezaFerdiansyah
+# flutterassignment2h8_riezaferdiansyah
+
+A new Flutter project.
