@@ -34,7 +34,7 @@ class NewsBody extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(0),
               child: Image(
-                image: AssetImage(cp.selectedNews?.urlToImage ?? '_'),
+                image: NetworkImage(cp.selectedNews?.urlToImage ?? '_'),
               ),
             ),
             Text(
@@ -50,6 +50,16 @@ class NewsBody extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 12,
                 color: Colors.grey,
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Text(
+              cp.selectedNews?.content ?? '_',
+              style: const TextStyle(
+                fontSize: 12,
+                color: Colors.black,
               ),
             ),
           ],

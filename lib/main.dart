@@ -110,6 +110,7 @@ class NewsBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final newsProviders = Provider.of<NewsProvider>(context);
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: SingleChildScrollView(
@@ -148,6 +149,10 @@ class NewsBody extends StatelessWidget {
                           itemBuilder: (context, index) {
                             return GestureDetector(
                               onTap: () {
+                                if (snapshot.hasData) {
+                                  newsProviders.selectNews(
+                                      snapshot.data![index]);
+                                }
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -177,7 +182,8 @@ class NewsBody extends StatelessWidget {
                                     height: 5,
                                   ),
                                   Text(
-                                    "${snapshot.data?[index].title!.substring(0, 27)}.." ?? '_',
+                                    "${snapshot.data?[index].title!.substring(0, 27)}.." ??
+                                        '_',
                                     style: const TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
@@ -226,6 +232,11 @@ class NewsBody extends StatelessWidget {
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () {
+                            if (snapshot.hasData) {
+                              newsProviders.selectNews(
+                                snapshot.data![index],
+                              );
+                            }
                             Navigator.push(
                               context,
                               MaterialPageRoute(
