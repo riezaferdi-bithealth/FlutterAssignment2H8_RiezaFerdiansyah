@@ -168,15 +168,12 @@ class NewsBody extends StatelessWidget {
                                     height: 5,
                                   ),
                                   Text(
-                                    snapshot.data?[index].title! ?? '_',
+                                    "${snapshot.data?[index].title!.substring(0,27)}.." ?? '_',
                                     style: const TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.black87, 
+                                      color: Colors.black87,
                                     ),
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                    softWrap: false,
                                   ),
                                   const SizedBox(
                                     height: 5,
