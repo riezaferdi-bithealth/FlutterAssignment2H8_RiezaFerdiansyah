@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutterassignment2h8_riezaferdiansyah/controller/news_control.dart';
 import 'package:intl/intl.dart';
 import 'package:flutterassignment2h8_riezaferdiansyah/detail_page.dart';
 import './api/news_service.dart';
+import 'package:provider/provider.dart';
+import 'controller/news_control.dart';
 
 void main() {
   runApp(const MainApp());
@@ -12,12 +15,19 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: NewsBody(),
-        bottomNavigationBar: BottomBar(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => NewsProvider(),
+        )
+      ],
+      child: const MaterialApp(
+        home: Scaffold(
+          body: NewsBody(),
+          bottomNavigationBar: BottomBar(),
+        ),
+        debugShowCheckedModeBanner: false,
       ),
-      debugShowCheckedModeBanner: false,
     );
   }
 }
