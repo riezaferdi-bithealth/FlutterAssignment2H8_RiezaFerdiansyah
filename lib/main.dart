@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutterassignment2h8_riezaferdiansyah/controller/news_control.dart';
+import 'controller/news_control.dart';
 import 'package:intl/intl.dart';
 import 'package:flutterassignment2h8_riezaferdiansyah/detail_page.dart';
 import './api/news_service.dart';
 import 'package:provider/provider.dart';
-import 'controller/news_control.dart';
 
 void main() {
   runApp(const MainApp());
@@ -178,8 +177,7 @@ class NewsBody extends StatelessWidget {
                                     height: 5,
                                   ),
                                   Text(
-                                    "${snapshot.data?[index].title!.substring(0, 27)}.." ??
-                                        '_',
+                                    "${snapshot.data?[index].title!.substring(0, 27)}.." ?? '_',
                                     style: const TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
