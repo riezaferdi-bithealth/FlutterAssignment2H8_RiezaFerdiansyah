@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-//import 'package:flutterassignment2h8_riezaferdiansyah/main.dart';
 
-// void main() {
-//   runApp(const DetailPage());
-// }
 
 class DetailPage extends StatelessWidget {
   const DetailPage({super.key});
@@ -20,7 +16,7 @@ class DetailPage extends StatelessWidget {
             },
             child: const Icon(Icons.arrow_back)),
       ),
-      body: NewsBody(),
+      body: const NewsBody(),
     );
   }
 }

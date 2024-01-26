@@ -168,7 +168,8 @@ class NewsBody extends StatelessWidget {
                                     height: 5,
                                   ),
                                   Text(
-                                    "${snapshot.data?[index].title!.substring(0,27)}.." ?? '_',
+                                    "${snapshot.data?[index].title!.substring(0, 27)}.." ??
+                                        '_',
                                     style: const TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
@@ -204,8 +205,68 @@ class NewsBody extends StatelessWidget {
               height: 16,
             ),
             const HotNews(),
-            //ListNews(),
-            const NewsAPIList(),
+            SizedBox(
+              child: FutureBuilder(
+                future: getNewsData(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: snapshot.data?.length ?? 0,
+                      scrollDirection: Axis.vertical,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const DetailPage(),
+                              ),
+                            );
+                          },
+                          child: ListTile(
+                            title: Text(
+                              snapshot.data?[index].title! ?? '_',
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black87,
+                              ),
+                              maxLines: 2,
+                            ),
+                            subtitle: Text(
+                              "By ${snapshot.data?[index].author! ?? '_'} on ${snapshot.data?[index].publishedAt! ?? '_'}",
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            leading: Container(
+                              width: 70,
+                              height: 120,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                image: DecorationImage(
+                                  fit: BoxFit.fill,
+                                  image: NetworkImage(
+                                    snapshot.data?[index].urlToImage! ?? '_',
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  } else if (snapshot.hasError) {
+                    return const Text("Snapshot Error");
+                  }
+                  // By default, show a loading spinner.
+                  return const CircularProgressIndicator();
+                },
+              ),
+            )
           ],
         ),
       ),
@@ -244,59 +305,6 @@ class HotNews extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class NewsAPIList extends StatefulWidget {
-  const NewsAPIList({super.key});
-
-  @override
-  State<NewsAPIList> createState() => _NewsAPIListState();
-}
-
-class _NewsAPIListState extends State<NewsAPIList> {
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: getNewsData(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          //print(snapshot.data);
-          return ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: snapshot.data?.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                leading:
-                    Image.network(snapshot.data?[index].urlToImage! ?? '_'),
-                title: Text(snapshot.data?[index].title! ?? '_'),
-                subtitle: Text(
-                    "By ${snapshot.data?[index].author! ?? '_'} on ${snapshot.data?[index].publishedAt! ?? '_'}"),
-                // trailing: SizedBox(
-                //   width: 100,
-                //   child: Row(
-                //     mainAxisSize: MainAxisSize.min,
-                //     children: [
-                //       Text(
-                //         snapshot.data?[index].content! ?? '_',
-                //         style: const TextStyle(
-                //           fontSize: 12,
-                //         ),
-                //       ),
-                //     ],
-                //   ),
-                // ),
-              );
-            },
-          );
-        } else if (snapshot.hasError) {
-          return const Text("ERROR COI");
-        }
-        // By default, show a loading spinner.
-        return const CircularProgressIndicator();
-      },
     );
   }
 }
