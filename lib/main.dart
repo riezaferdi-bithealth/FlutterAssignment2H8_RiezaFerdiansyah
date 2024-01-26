@@ -22,32 +22,6 @@ class MainApp extends StatelessWidget {
   }
 }
 
-class NewsBody extends StatelessWidget {
-  const NewsBody({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.all(16),
-      children: const <Widget>[
-        TopBar(),
-        Text(
-          'Latest News',
-          style: TextStyle(
-            height: 3,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        LatestNews(),
-        HotNews(),
-        //ListNews(),
-        NewsAPIList(),
-      ],
-    );
-  }
-}
-
 class ProfileIcon extends StatelessWidget {
   const ProfileIcon({super.key});
 
@@ -122,90 +96,121 @@ class TopBar extends StatelessWidget {
   }
 }
 
-// class ListNews extends StatelessWidget {
-//   const ListNews({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return GestureDetector(
-//       onTap: () {
-//         Navigator.push(
-//           context,
-//           MaterialPageRoute(
-//             builder: (context) => const DetailPage(),
-//           ),
-//         );
-//       },
-//       child: ListTile(
-//         leading: ClipRRect(
-//           borderRadius: BorderRadius.circular(10.0),
-//           child: const AspectRatio(
-//             aspectRatio: 8 / 7,
-//             child: Image(
-//               image: AssetImage('assets/images/batik2.jpg'),
-//               fit: BoxFit.cover,
-//             ),
-//           ),
-//         ),
-//         title: const Text(
-//           'Batik Mendunia oleh Badan Nasional Pengelola Batik',
-//           style: TextStyle(
-//             fontSize: 15,
-//             fontWeight: FontWeight.bold,
-//           ),
-//         ),
-//         subtitle: Text(
-//           '${DateFormat.EEEE().format(DateTime.now())}, ${DateFormat.d().format(DateTime.now())} ${DateFormat.MMMM().format(DateTime.now())} ${DateFormat.y().format(DateTime.now())} | 4 hours ago',
-//           style: const TextStyle(
-//             fontSize: 12,
-//             color: Colors.grey,
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-
-class LatestNews extends StatelessWidget {
-  const LatestNews({super.key});
+class NewsBody extends StatelessWidget {
+  const NewsBody({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const DetailPage(),
-          ),
-        );
-      },
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8.0),
-            child: const Image(
-              image: AssetImage('assets/images/batik1.jpg'),
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            const TopBar(),
+            const SizedBox(
+              height: 10,
             ),
-          ),
-          const Text(
-            'Batik Mendunia oleh Badan Nasional Pengelola Batik',
-            style: TextStyle(
-              overflow: TextOverflow.clip,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
+            // Latest News Widget
+            Column(
+              children: [
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Latest News',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 220,
+                  child: FutureBuilder(
+                    future: getNewsData(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        //print(snapshot.data);
+                        return ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: snapshot.data?.length ?? 0,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const DetailPage(),
+                                  ),
+                                );
+                              },
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(
+                                    width: 250,
+                                    height: 150,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12),
+                                      image: DecorationImage(
+                                        fit: BoxFit.fill,
+                                        image: NetworkImage(
+                                          snapshot.data?[index].urlToImage! ??
+                                              '_',
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    snapshot.data?[index].title! ?? '_',
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black87, 
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    softWrap: false,
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "By ${snapshot.data?[index].author! ?? '_'} on ${snapshot.data?[index].publishedAt! ?? '_'}",
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                      } else if (snapshot.hasError) {
+                        return const Text("ERROR COI");
+                      }
+                      // By default, show a loading spinner.
+                      return const CircularProgressIndicator();
+                    },
+                  ),
+                )
+              ],
             ),
-          ),
-          Text(
-            '${DateFormat.EEEE().format(DateTime.now())}, ${DateFormat.d().format(DateTime.now())} ${DateFormat.MMMM().format(DateTime.now())} ${DateFormat.y().format(DateTime.now())} | 4 hours ago',
-            style: const TextStyle(
-              fontSize: 12,
-              color: Colors.grey,
+            const SizedBox(
+              height: 16,
             ),
-          ),
-        ],
+            const HotNews(),
+            //ListNews(),
+            const NewsAPIList(),
+          ],
+        ),
       ),
     );
   }
@@ -260,7 +265,7 @@ class _NewsAPIListState extends State<NewsAPIList> {
       future: getNewsData(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          print(snapshot.data);
+          //print(snapshot.data);
           return ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
@@ -332,38 +337,6 @@ class _BottomBarState extends State<BottomBar> {
           icon: Icon(Icons.settings),
         ),
       ],
-    );
-  }
-}
-
-class NewsAPIList2 extends StatelessWidget {
-  const NewsAPIList2({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: getNewsData(),
-      builder: (context, snapshot) {
-        print(snapshot);
-        if (snapshot.connectionState == ConnectionState.done) {
-          return ListView.builder(
-            itemCount: snapshot.data?.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                leading: Image.asset(snapshot.data?[index].urlToImage! ?? '_'),
-                title: Text(snapshot.data?[index].title! ?? '_'),
-                subtitle: Text(
-                    "By ${snapshot.data?[index].author! ?? '_'} on ${snapshot.data?[index].publishedAt! ?? '_'}"),
-                trailing: Text(snapshot.data?[index].content! ?? '_'),
-              );
-            },
-          );
-        } else if (snapshot.hasError) {
-          return Text("${snapshot.error}");
-        }
-        // By default, show a loading spinner.
-        return const CircularProgressIndicator();
-      },
     );
   }
 }
